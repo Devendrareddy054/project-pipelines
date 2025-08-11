@@ -27,12 +27,8 @@
 					},
 					"sink": {
 						"type": "AzureSqlSink",
-						"writeBehavior": "upsert",
-						"upsertSettings": {
-							"useTempDB": true
-						},
+						"writeBehavior": "insert",
 						"sqlWriterUseTableLock": false,
-						"tableOption": "autoCreate",
 						"disableMetricsCollection": false
 					},
 					"enableStaging": false,
@@ -205,7 +201,7 @@
 						"referenceName": "ds_sql",
 						"type": "DatasetReference",
 						"parameters": {
-							"table_name": "dbo.cars_data"
+							"table_name": "cars_data"
 						}
 					}
 				]
