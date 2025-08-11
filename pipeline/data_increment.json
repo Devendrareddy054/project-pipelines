@@ -1,5 +1,5 @@
 {
-	"name": "pipeline1",
+	"name": "data_increment",
 	"properties": {
 		"activities": [
 			{
@@ -273,42 +273,6 @@
 						"type": "DatasetReference"
 					}
 				]
-			},
-			{
-				"name": "update_last_load_value",
-				"type": "SqlServerStoredProcedure",
-				"dependsOn": [
-					{
-						"activity": "Copy data1",
-						"dependencyConditions": [
-							"Completed"
-						]
-					}
-				],
-				"policy": {
-					"timeout": "0.12:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"storedProcedureName": "[dbo].[updatewatermarkTable]",
-					"storedProcedureParameters": {
-						"lastload": {
-							"value": {
-								"value": "@activity('current_load').output.firstRow.max_date",
-								"type": "Expression"
-							},
-							"type": "String"
-						}
-					}
-				},
-				"linkedServiceName": {
-					"referenceName": "ls_sql",
-					"type": "LinkedServiceReference"
-				}
 			}
 		],
 		"annotations": [],
