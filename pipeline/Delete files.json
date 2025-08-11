@@ -24,7 +24,7 @@
 							"referenceName": "ls_adls",
 							"type": "LinkedServiceReference"
 						},
-						"path": "d1185bbe-c38b-4e40-8a8e-7953d05c4497"
+						"path": "bronze/raw_data"
 					},
 					"enableLogging": true,
 					"storeSettings": {
