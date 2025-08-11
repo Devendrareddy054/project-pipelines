@@ -1,0 +1,9 @@
+{
+	"name": "df-cars21",
+	"location": "centralindia",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "dec4f2fb-734f-4049-86d0-d9f281e96974",
+		"tenantId": "4c5e49b9-98fd-4fb7-b4e7-ecfe2760436b"
+	}
+}
