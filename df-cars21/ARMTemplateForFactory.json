@@ -41,14 +41,14 @@
 	},
 	"resources": [
 		{
-			"name": "[concat(parameters('factoryName'), '/data_injection')]",
+			"name": "[concat(parameters('factoryName'), '/Delete files')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"activities": [
 					{
-						"name": "data_ingest",
-						"type": "Copy",
+						"name": "Delete1",
+						"type": "Delete",
 						"dependsOn": [],
 						"policy": {
 							"timeout": "0.12:00:00",
@@ -59,210 +59,39 @@
 						},
 						"userProperties": [],
 						"typeProperties": {
-							"source": {
-								"type": "DelimitedTextSource",
-								"storeSettings": {
-									"type": "HttpReadSettings",
-									"requestMethod": "GET"
+							"dataset": {
+								"referenceName": "ds_bronze",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"logStorageSettings": {
+								"linkedServiceName": {
+									"referenceName": "ls_adls",
+									"type": "LinkedServiceReference"
 								},
-								"formatSettings": {
-									"type": "DelimitedTextReadSettings"
-								}
+								"path": "d1185bbe-c38b-4e40-8a8e-7953d05c4497"
 							},
-							"sink": {
-								"type": "AzureSqlSink",
-								"writeBehavior": "insert",
-								"sqlWriterUseTableLock": false
-							},
-							"enableStaging": false,
-							"translator": {
-								"type": "TabularTranslator",
-								"mappings": [
-									{
-										"source": {
-											"name": "Branch_ID",
-											"type": "String",
-											"physicalType": "String"
-										},
-										"sink": {
-											"name": "Branch_ID",
-											"type": "String",
-											"physicalType": "varchar"
-										}
-									},
-									{
-										"source": {
-											"name": "Dealer_ID",
-											"type": "String",
-											"physicalType": "String"
-										},
-										"sink": {
-											"name": "Dealer_ID",
-											"type": "String",
-											"physicalType": "varchar"
-										}
-									},
-									{
-										"source": {
-											"name": "Model_ID",
-											"type": "String",
-											"physicalType": "String"
-										},
-										"sink": {
-											"name": "Model_ID",
-											"type": "String",
-											"physicalType": "varchar"
-										}
-									},
-									{
-										"source": {
-											"name": "Revenue",
-											"type": "String",
-											"physicalType": "String"
-										},
-										"sink": {
-											"name": "Revenue",
-											"type": "Int32",
-											"physicalType": "int"
-										}
-									},
-									{
-										"source": {
-											"name": "Units_Sold",
-											"type": "String",
-											"physicalType": "String"
-										},
-										"sink": {
-											"name": "Units_Sold",
-											"type": "Int32",
-											"physicalType": "int"
-										}
-									},
-									{
-										"source": {
-											"name": "Date_ID",
-											"type": "String",
-											"physicalType": "String"
-										},
-										"sink": {
-											"name": "Date_ID",
-											"type": "String",
-											"physicalType": "varchar"
-										}
-									},
-									{
-										"source": {
-											"name": "Day",
-											"type": "String",
-											"physicalType": "String"
-										},
-										"sink": {
-											"name": "Day",
-											"type": "Int32",
-											"physicalType": "int"
-										}
-									},
-									{
-										"source": {
-											"name": "Month",
-											"type": "String",
-											"physicalType": "String"
-										},
-										"sink": {
-											"name": "Month",
-											"type": "Int32",
-											"physicalType": "int"
-										}
-									},
-									{
-										"source": {
-											"name": "Year",
-											"type": "String",
-											"physicalType": "String"
-										},
-										"sink": {
-											"name": "Year",
-											"type": "Int32",
-											"physicalType": "int"
-										}
-									},
-									{
-										"source": {
-											"name": "BranchName",
-											"type": "String",
-											"physicalType": "String"
-										},
-										"sink": {
-											"name": "BranchName",
-											"type": "String",
-											"physicalType": "varchar"
-										}
-									},
-									{
-										"source": {
-											"name": "DealerName",
-											"type": "String",
-											"physicalType": "String"
-										},
-										"sink": {
-											"name": "DealerName",
-											"type": "String",
-											"physicalType": "varchar"
-										}
-									},
-									{
-										"source": {
-											"name": "Product_Name",
-											"type": "String",
-											"physicalType": "String"
-										},
-										"sink": {
-											"name": "Product_Name",
-											"type": "String",
-											"physicalType": "varchar"
-										}
-									}
-								],
-								"typeConversion": true,
-								"typeConversionSettings": {
-									"allowDataTruncation": true,
-									"treatBooleanAsNumber": false
-								}
+							"enableLogging": true,
+							"storeSettings": {
+								"type": "AzureBlobFSReadSettings",
+								"recursive": true,
+								"enablePartitionDiscovery": false
 							}
-						},
-						"inputs": [
-							{
-								"referenceName": "ds_github",
-								"type": "DatasetReference",
-								"parameters": {
-									"file_name": "SalesData.csv"
-								}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "ds_sql",
-								"type": "DatasetReference",
-								"parameters": {
-									"table_name": "dbo.cars_data"
-								}
-							}
-						]
+						}
 					}
 				],
 				"policy": {
 					"elapsedTimeMetric": {}
 				},
-				"annotations": [],
-				"lastPublishTime": "2025-08-11T09:24:26Z"
+				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/ds_github')]",
-				"[concat(variables('factoryId'), '/datasets/ds_sql')]"
+				"[concat(variables('factoryId'), '/datasets/ds_bronze')]",
+				"[concat(variables('factoryId'), '/linkedServices/ls_adls')]"
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/pipeline1')]",
+			"name": "[concat(parameters('factoryName'), '/data_increment')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -539,42 +368,6 @@
 								"parameters": {}
 							}
 						]
-					},
-					{
-						"name": "update_last_load_value",
-						"type": "SqlServerStoredProcedure",
-						"dependsOn": [
-							{
-								"activity": "Copy data1",
-								"dependencyConditions": [
-									"Completed"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"storedProcedureName": "[[dbo].[updatewatermarkTable]",
-							"storedProcedureParameters": {
-								"lastload": {
-									"value": {
-										"value": "@activity('current_load').output.firstRow.max_date",
-										"type": "Expression"
-									},
-									"type": "String"
-								}
-							}
-						},
-						"linkedServiceName": {
-							"referenceName": "ls_sql",
-							"type": "LinkedServiceReference"
-						}
 					}
 				],
 				"policy": {
@@ -585,8 +378,228 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/ds_sql')]",
-				"[concat(variables('factoryId'), '/datasets/ds_bronze')]",
-				"[concat(variables('factoryId'), '/linkedServices/ls_sql')]"
+				"[concat(variables('factoryId'), '/datasets/ds_bronze')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/data_injection')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "data_ingest",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "HttpReadSettings",
+									"requestMethod": "GET"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "AzureSqlSink",
+								"writeBehavior": "insert",
+								"sqlWriterUseTableLock": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "Branch_ID",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Branch_ID",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "Dealer_ID",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Dealer_ID",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "Model_ID",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Model_ID",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "Revenue",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Revenue",
+											"type": "Int32",
+											"physicalType": "int"
+										}
+									},
+									{
+										"source": {
+											"name": "Units_Sold",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Units_Sold",
+											"type": "Int32",
+											"physicalType": "int"
+										}
+									},
+									{
+										"source": {
+											"name": "Date_ID",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Date_ID",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "Day",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Day",
+											"type": "Int32",
+											"physicalType": "int"
+										}
+									},
+									{
+										"source": {
+											"name": "Month",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Month",
+											"type": "Int32",
+											"physicalType": "int"
+										}
+									},
+									{
+										"source": {
+											"name": "Year",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Year",
+											"type": "Int32",
+											"physicalType": "int"
+										}
+									},
+									{
+										"source": {
+											"name": "BranchName",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "BranchName",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "DealerName",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "DealerName",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "Product_Name",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Product_Name",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									}
+								],
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "ds_github",
+								"type": "DatasetReference",
+								"parameters": {
+									"file_name": "SalesData.csv"
+								}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "ds_sql",
+								"type": "DatasetReference",
+								"parameters": {
+									"table_name": "dbo.cars_data"
+								}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": [],
+				"lastPublishTime": "2025-08-11T09:24:26Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_github')]",
+				"[concat(variables('factoryId'), '/datasets/ds_sql')]"
 			]
 		},
 		{
@@ -603,7 +616,7 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
-						"folderPath": "raw",
+						"folderPath": "raw_data",
 						"fileSystem": "bronze"
 					},
 					"compressionCodec": "snappy"
