@@ -296,7 +296,7 @@
 				"typeProperties": {
 					"storedProcedureName": "[dbo].[updatewatermarkTable]",
 					"storedProcedureParameters": {
-						"loaddata": {
+						"last_load": {
 							"value": {
 								"value": "SELECT * from cars_data \nWHERE \nDate_ID >'@{activity('last_load').output.firstRow.last_load}' AND\nDate_ID <='@{activity('current_load').output.firstRow.max_date}'\n",
 								"type": "Expression"
