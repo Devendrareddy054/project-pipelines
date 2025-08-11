@@ -191,7 +191,7 @@
 						"referenceName": "ds_github",
 						"type": "DatasetReference",
 						"parameters": {
-							"file_name": "SalesData.csv"
+							"file_name": "IncrementalSales.csv"
 						}
 					}
 				],
